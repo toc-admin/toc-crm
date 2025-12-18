@@ -36,8 +36,8 @@ export async function POST(request: NextRequest) {
     if (storageError) throw storageError
 
     // Update database to remove image_url
-    const { error: dbError } = await supabase
-      .from('categories')
+    const { error: dbError } = await (supabase
+      .from('categories') as any)
       .update({ image_url: null })
       .eq('id', categoryId)
 

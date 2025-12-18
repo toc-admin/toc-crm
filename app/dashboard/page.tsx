@@ -36,8 +36,8 @@ async function getDashboardStats() {
 async function getRecentQuotes() {
   const supabase = createServerClient()
 
-  const { data: quotes } = await supabase
-    .from('quote_requests')
+  const { data: quotes } = await (supabase
+    .from('quote_requests') as any)
     .select('*, products(name)')
     .order('created_at', { ascending: false })
     .limit(10)
@@ -162,7 +162,7 @@ export default async function DashboardPage() {
                   </tr>
                 </thead>
                 <tbody className="bg-white divide-y divide-gray-200">
-                  {recentQuotes.map((quote) => (
+                  {recentQuotes.map((quote: any) => (
                     <tr key={quote.id} className="hover:bg-gray-50">
                       <td className="px-6 py-4 whitespace-nowrap">
                         <div className="text-sm font-medium text-gray-900">

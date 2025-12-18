@@ -85,8 +85,8 @@ export default function RoomForm({
         const data = await response.json()
 
         // Update database
-        const { error } = await supabase
-          .from('rooms')
+        const { error } = await (supabase
+          .from('rooms') as any)
           .update({ hero_image_url: data.url })
           .eq('id', roomId)
 
@@ -150,8 +150,8 @@ export default function RoomForm({
 
       if (roomId) {
         // Update existing room
-        const { error } = await supabase
-          .from('rooms')
+        const { error } = await (supabase
+          .from('rooms') as any)
           .update(payload)
           .eq('id', roomId)
 
@@ -165,8 +165,8 @@ export default function RoomForm({
         }, 1500)
       } else {
         // Create new room
-        const { data: newRoom, error } = await supabase
-          .from('rooms')
+        const { data: newRoom, error } = await (supabase
+          .from('rooms') as any)
           .insert(payload)
           .select()
           .single()
@@ -177,8 +177,8 @@ export default function RoomForm({
         if (pendingFile && newRoom) {
           const imageUrl = await uploadPendingImage(newRoom.id)
 
-          await supabase
-            .from('rooms')
+          await (supabase
+            .from('rooms') as any)
             .update({ hero_image_url: imageUrl })
             .eq('id', newRoom.id)
         }

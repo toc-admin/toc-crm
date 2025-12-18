@@ -68,8 +68,8 @@ export default function ProductsTable({
     if (!confirm(`Are you sure you want to delete "${name}"?`)) return
 
     try {
-      const { error } = await supabase
-        .from('products')
+      const { error } = await (supabase
+        .from('products') as any)
         .update({ deleted_at: new Date().toISOString() })
         .eq('id', id)
 

@@ -28,8 +28,8 @@ export async function POST(request: NextRequest) {
     }
 
     // Get existing category to check for old image
-    const { data: category } = await supabase
-      .from('categories')
+    const { data: category } = await (supabase
+      .from('categories') as any)
       .select('image_url')
       .eq('id', categoryId)
       .single()

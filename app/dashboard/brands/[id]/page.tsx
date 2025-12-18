@@ -8,8 +8,8 @@ export const dynamic = 'force-dynamic'
 async function getBrand(id: string) {
   const supabase = createServerClient()
 
-  const { data: brand, error } = await supabase
-    .from('brands')
+  const { data: brand, error } = await (supabase
+    .from('brands') as any)
     .select('*')
     .eq('id', id)
     .single()

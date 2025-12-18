@@ -140,7 +140,7 @@ export default function ProductForm({
           const data = await response.json()
 
           // Save to database
-          const { error } = await supabase.from('product_images').insert({
+          const { error } = await (supabase.from('product_images') as any).insert({
             product_id: productId,
             image_url: data.urls.original,
             thumbnail_url: data.urls.thumbnail,
@@ -194,7 +194,7 @@ export default function ProductForm({
       const data = await response.json()
 
       // Save to database
-      await supabase.from('product_images').insert({
+      await (supabase.from('product_images') as any).insert({
         product_id: newProductId,
         image_url: data.urls.original,
         thumbnail_url: data.urls.thumbnail,
@@ -225,16 +225,16 @@ export default function ProductForm({
 
       if (productId) {
         // Update existing product
-        const { error } = await supabase
-          .from('products')
+        const { error } = await (supabase
+          .from('products') as any)
           .update(productData)
           .eq('id', productId)
 
         if (error) throw error
       } else {
         // Create new product
-        const { data: newProduct, error } = await supabase
-          .from('products')
+        const { data: newProduct, error } = await (supabase
+          .from('products') as any)
           .insert(productData)
           .select()
           .single()
@@ -245,21 +245,21 @@ export default function ProductForm({
 
       // Handle features
       if (productId) {
-        await supabase.from('product_features').delete().eq('product_id', productId)
+        await (supabase.from('product_features') as any).delete().eq('product_id', productId)
       }
       if (features.length > 0 && newProductId) {
-        await supabase
-          .from('product_features')
+        await (supabase
+          .from('product_features') as any)
           .insert(features.map((f) => ({ product_id: newProductId, feature_name: f })))
       }
 
       // Handle colors
       if (productId) {
-        await supabase.from('product_colors').delete().eq('product_id', productId)
+        await (supabase.from('product_colors') as any).delete().eq('product_id', productId)
       }
       if (colors.length > 0 && newProductId) {
-        await supabase
-          .from('product_colors')
+        await (supabase
+          .from('product_colors') as any)
           .insert(
             colors.map((c) => ({
               product_id: newProductId,
@@ -271,11 +271,11 @@ export default function ProductForm({
 
       // Handle specifications
       if (productId) {
-        await supabase.from('product_specifications').delete().eq('product_id', productId)
+        await (supabase.from('product_specifications') as any).delete().eq('product_id', productId)
       }
       if (specifications.length > 0 && newProductId) {
-        await supabase
-          .from('product_specifications')
+        await (supabase
+          .from('product_specifications') as any)
           .insert(
             specifications.map((s) => ({
               product_id: newProductId,
@@ -287,11 +287,11 @@ export default function ProductForm({
 
       // Handle rooms
       if (productId) {
-        await supabase.from('product_rooms').delete().eq('product_id', productId)
+        await (supabase.from('product_rooms') as any).delete().eq('product_id', productId)
       }
       if (selectedRooms.length > 0 && newProductId) {
-        await supabase
-          .from('product_rooms')
+        await (supabase
+          .from('product_rooms') as any)
           .insert(selectedRooms.map((roomId) => ({ product_id: newProductId, room_id: roomId })))
       }
 

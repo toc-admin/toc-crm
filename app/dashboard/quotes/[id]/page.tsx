@@ -12,8 +12,8 @@ export const dynamic = 'force-dynamic'
 async function getQuote(id: string) {
   const supabase = createServerClient()
 
-  const { data: quote, error } = await supabase
-    .from('quote_requests')
+  const { data: quote, error } = await (supabase
+    .from('quote_requests') as any)
     .select(`
       *,
       product:products(

@@ -6,8 +6,8 @@ import { notFound } from 'next/navigation'
 async function getProduct(id: string) {
   const supabase = createServerClient()
 
-  const { data: product, error } = await supabase
-    .from('products')
+  const { data: product, error } = await (supabase
+    .from('products') as any)
     .select(`
       *,
       images:product_images(*),
@@ -31,9 +31,9 @@ async function getData() {
   const supabase = createServerClient()
 
   const [{ data: brands }, { data: categories }, { data: rooms }] = await Promise.all([
-    supabase.from('brands').select('id, name').order('name'),
-    supabase.from('categories').select('id, name').order('name'),
-    supabase.from('rooms').select('id, name').order('name'),
+    (supabase.from('brands') as any).select('id, name').order('name'),
+    (supabase.from('categories') as any).select('id, name').order('name'),
+    (supabase.from('rooms') as any).select('id, name').order('name'),
   ])
 
   return {

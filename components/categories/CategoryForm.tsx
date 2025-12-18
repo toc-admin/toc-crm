@@ -83,8 +83,8 @@ export default function CategoryForm({
         const data = await response.json()
 
         // Update database
-        const { error } = await supabase
-          .from('categories')
+        const { error } = await (supabase
+          .from('categories') as any)
           .update({ image_url: data.url })
           .eq('id', categoryId)
 
@@ -170,8 +170,8 @@ export default function CategoryForm({
 
       if (categoryId) {
         // Update existing category
-        const { error } = await supabase
-          .from('categories')
+        const { error } = await (supabase
+          .from('categories') as any)
           .update(payload)
           .eq('id', categoryId)
 
@@ -185,8 +185,8 @@ export default function CategoryForm({
         }, 1500)
       } else {
         // Create new category
-        const { data: newCategory, error } = await supabase
-          .from('categories')
+        const { data: newCategory, error } = await (supabase
+          .from('categories') as any)
           .insert(payload)
           .select()
           .single()
@@ -197,8 +197,8 @@ export default function CategoryForm({
         if (pendingFile && newCategory) {
           const imageUrl = await uploadPendingImage(newCategory.id)
 
-          await supabase
-            .from('categories')
+          await (supabase
+            .from('categories') as any)
             .update({ image_url: imageUrl })
             .eq('id', newCategory.id)
         }

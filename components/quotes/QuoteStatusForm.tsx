@@ -35,8 +35,8 @@ export default function QuoteStatusForm({
     setIsSubmitting(true)
 
     try {
-      const { error } = await supabase
-        .from('quote_requests')
+      const { error } = await (supabase
+        .from('quote_requests') as any)
         .update({
           status,
           updated_at: new Date().toISOString(),

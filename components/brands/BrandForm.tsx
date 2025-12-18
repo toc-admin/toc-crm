@@ -85,8 +85,8 @@ export default function BrandForm({
         const data = await response.json()
 
         // Update database
-        const { error } = await supabase
-          .from('brands')
+        const { error } = await (supabase
+          .from('brands') as any)
           .update({ logo_url: data.url })
           .eq('id', brandId)
 
@@ -150,8 +150,8 @@ export default function BrandForm({
 
       if (brandId) {
         // Update existing brand
-        const { error } = await supabase
-          .from('brands')
+        const { error } = await (supabase
+          .from('brands') as any)
           .update(payload)
           .eq('id', brandId)
 
@@ -165,8 +165,8 @@ export default function BrandForm({
         }, 1500)
       } else {
         // Create new brand
-        const { data: newBrand, error } = await supabase
-          .from('brands')
+        const { data: newBrand, error } = await (supabase
+          .from('brands') as any)
           .insert(payload)
           .select()
           .single()
@@ -177,8 +177,8 @@ export default function BrandForm({
         if (pendingFile && newBrand) {
           const logoUrl = await uploadPendingLogo(newBrand.id)
 
-          await supabase
-            .from('brands')
+          await (supabase
+            .from('brands') as any)
             .update({ logo_url: logoUrl })
             .eq('id', newBrand.id)
         }
