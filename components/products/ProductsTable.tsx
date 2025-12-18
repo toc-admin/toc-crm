@@ -96,7 +96,7 @@ export default function ProductsTable({
               placeholder="Search products by name or SKU..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all duration-200"
             />
           </div>
 
@@ -106,7 +106,7 @@ export default function ProductsTable({
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-lg transition-all duration-200 ${
                 viewMode === 'grid'
-                  ? 'bg-white text-primary-600 shadow-soft'
+                  ? 'bg-white text-slate-900 shadow-soft'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -116,7 +116,7 @@ export default function ProductsTable({
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-lg transition-all duration-200 ${
                 viewMode === 'list'
-                  ? 'bg-white text-primary-600 shadow-soft'
+                  ? 'bg-white text-slate-900 shadow-soft'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -130,7 +130,7 @@ export default function ProductsTable({
           <select
             value={categoryFilter}
             onChange={(e) => setCategoryFilter(e.target.value)}
-            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200"
+            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all duration-200"
           >
             <option value="all">All Categories</option>
             {categories.map((cat) => (
@@ -143,7 +143,7 @@ export default function ProductsTable({
           <select
             value={brandFilter}
             onChange={(e) => setBrandFilter(e.target.value)}
-            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200"
+            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all duration-200"
           >
             <option value="all">All Brands</option>
             {brands.map((brand) => (
@@ -156,7 +156,7 @@ export default function ProductsTable({
           <select
             value={featuredFilter}
             onChange={(e) => setFeaturedFilter(e.target.value)}
-            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 transition-all duration-200"
+            className="px-4 py-2 bg-white border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all duration-200"
           >
             <option value="all">All Products</option>
             <option value="featured">Featured Only</option>
@@ -213,7 +213,7 @@ export default function ProductsTable({
                 {/* Product Info */}
                 <div className="p-4 space-y-3">
                   <div>
-                    <h3 className="font-display font-semibold text-slate-900 group-hover:text-primary-600 transition-colors duration-200 line-clamp-2">
+                    <h3 className="font-display font-semibold text-slate-900 transition-colors duration-200 line-clamp-2">
                       {product.name}
                     </h3>
                     {product.short_description && (
@@ -262,7 +262,7 @@ export default function ProductsTable({
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-4">
                     <div className="flex-1 min-w-0">
-                      <h3 className="font-display font-semibold text-slate-900 group-hover:text-primary-600 transition-colors duration-200 truncate">
+                      <h3 className="font-display font-semibold text-slate-900 transition-colors duration-200 truncate">
                         {product.name}
                       </h3>
                       {product.short_description && (
@@ -305,8 +305,8 @@ export default function ProductsTable({
       ) : (
         <div className="card p-12 text-center">
           <div className="max-w-md mx-auto space-y-4">
-            <div className="w-20 h-20 bg-gradient-to-br from-primary-100 to-accent-100 rounded-2xl flex items-center justify-center mx-auto">
-              <Package className="h-10 w-10 text-primary-600" />
+            <div className="w-20 h-20 bg-gray-100 rounded-2xl flex items-center justify-center mx-auto">
+              <Package className="h-10 w-10 text-slate-900" />
             </div>
             <div>
               <h3 className="text-lg font-display font-semibold text-slate-900">

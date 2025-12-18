@@ -73,7 +73,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
               placeholder="Search brands by name or slug..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200"
+              className="w-full pl-12 pr-4 py-3 bg-slate-50 border border-slate-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-slate-900 focus:border-transparent transition-all duration-200"
             />
           </div>
 
@@ -83,7 +83,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-white text-primary-600 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -93,7 +93,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-white text-primary-600 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -151,7 +151,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-lg font-display font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors">
+                <h3 className="text-lg font-display font-bold text-slate-900 mb-2 transition-colors">
                   {brand.name}
                 </h3>
 
@@ -175,7 +175,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
-                      className="text-xs text-primary-600 hover:text-primary-700 flex items-center gap-1"
+                      className="text-xs text-slate-900 hover:text-slate-700 flex items-center gap-1"
                     >
                       <ExternalLink className="h-3 w-3" />
                       Visit website
@@ -191,7 +191,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                       e.stopPropagation()
                       router.push(`/dashboard/brands/${brand.id}`)
                     }}
-                    className="flex-1 py-2 px-3 bg-primary-50 text-primary-600 text-sm font-medium rounded-lg hover:bg-primary-100 transition-colors"
+                    className="flex-1 py-2 px-3 bg-gray-100 text-slate-900 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     <Edit className="h-4 w-4 inline mr-1" />
                     Edit
@@ -275,7 +275,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
-                          className="text-sm text-primary-600 hover:text-primary-700 flex items-center gap-1"
+                          className="text-sm text-slate-900 hover:text-slate-700 flex items-center gap-1"
                         >
                           <ExternalLink className="h-3 w-3" />
                           Visit
@@ -294,7 +294,7 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                             e.stopPropagation()
                             router.push(`/dashboard/brands/${brand.id}`)
                           }}
-                          className="p-2 text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                          className="p-2 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                           <Edit className="h-4 w-4" />
                         </button>

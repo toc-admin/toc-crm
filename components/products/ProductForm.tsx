@@ -334,7 +334,7 @@ export default function ProductForm({
               type="text"
               {...register('name')}
               onChange={handleNameChange}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
             {errors.name && (
               <p className="mt-1 text-sm text-red-600">{errors.name.message}</p>
@@ -348,7 +348,7 @@ export default function ProductForm({
             <input
               type="text"
               {...register('slug')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
             {errors.slug && (
               <p className="mt-1 text-sm text-red-600">{errors.slug.message}</p>
@@ -361,7 +361,7 @@ export default function ProductForm({
             </label>
             <select
               {...register('category_id')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             >
               <option value="">Select category</option>
               {categories.map((cat) => (
@@ -378,7 +378,7 @@ export default function ProductForm({
             </label>
             <select
               {...register('brand_id')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             >
               <option value="">Select brand</option>
               {brands.map((brand) => (
@@ -396,7 +396,7 @@ export default function ProductForm({
             <input
               type="text"
               {...register('subcategory')}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -406,7 +406,7 @@ export default function ProductForm({
               <button
                 type="button"
                 onClick={generateSKU}
-                className="ml-2 text-xs text-primary-600 hover:text-primary-700 underline"
+                className="ml-2 text-xs text-slate-900 hover:text-slate-700 underline"
               >
                 Generate
               </button>
@@ -415,7 +415,7 @@ export default function ProductForm({
               type="text"
               {...register('sku')}
               placeholder="Leave empty or click Generate"
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
             <p className="mt-1 text-xs text-gray-500">
               Example: Executive Office Chair → EXE-OFF-CHA-4523
@@ -429,7 +429,7 @@ export default function ProductForm({
             <textarea
               {...register('short_description')}
               rows={2}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -440,7 +440,7 @@ export default function ProductForm({
             <textarea
               {...register('long_description')}
               rows={5}
-              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-primary-500"
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
           </div>
 
@@ -471,7 +471,7 @@ export default function ProductForm({
               multiple
               onChange={handleImageUpload}
               disabled={uploading}
-              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-primary-50 file:text-primary-700 hover:file:bg-primary-100"
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-slate-900 hover:file:bg-gray-200"
             />
             {!productId && pendingFiles.length > 0 && (
               <p className="mt-2 text-sm text-gray-600">
@@ -584,7 +584,7 @@ export default function ProductForm({
           <button
             type="button"
             onClick={() => setFeatures([...features, ''])}
-            className="text-sm text-primary-600 hover:text-primary-700"
+            className="text-sm text-slate-900 hover:text-slate-700"
           >
             + Add Feature
           </button>
@@ -631,7 +631,7 @@ export default function ProductForm({
           <button
             type="button"
             onClick={() => setColors([...colors, { name: '', hex: '' }])}
-            className="text-sm text-primary-600 hover:text-primary-700"
+            className="text-sm text-slate-900 hover:text-slate-700"
           >
             + Add Color
           </button>
@@ -678,7 +678,7 @@ export default function ProductForm({
           <button
             type="button"
             onClick={() => setSpecifications([...specifications, { key: '', value: '' }])}
-            className="text-sm text-primary-600 hover:text-primary-700"
+            className="text-sm text-slate-900 hover:text-slate-700"
           >
             + Add Specification
           </button>
@@ -690,7 +690,7 @@ export default function ProductForm({
         <button
           type="submit"
           disabled={loading}
-          className="px-6 py-2 bg-primary-700 text-white rounded-md hover:bg-primary-800 disabled:opacity-50 disabled:cursor-not-allowed"
+          className="px-6 py-2 bg-slate-900 text-white rounded-md hover:bg-slate-800 disabled:opacity-50 disabled:cursor-not-allowed"
         >
           {loading ? 'Saving...' : productId ? 'Update Product' : 'Create Product'}
         </button>

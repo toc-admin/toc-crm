@@ -5,20 +5,22 @@
 @layer base {
   * {
     @apply border-gray-200;
+    font-family: 'Manrope', sans-serif;
   }
 
   body {
-    @apply bg-gradient-to-br from-slate-50 via-blue-50/30 to-violet-50/30 text-slate-900 antialiased;
+    @apply bg-gray-50 text-slate-900 antialiased;
   }
 
   h1, h2, h3, h4, h5, h6 {
-    @apply font-display;
+    font-family: 'Manrope', sans-serif;
+    font-weight: 700;
   }
 }
 
 @layer components {
   .btn-primary {
-    @apply inline-flex items-center justify-center px-4 py-2.5 text-sm font-medium rounded-xl text-white bg-gradient-to-r from-primary-600 to-primary-700 hover:from-primary-700 hover:to-primary-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary-500 shadow-soft hover:shadow-medium transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
+    @apply inline-flex items-center justify-center px-4 py-2.5 text-sm font-semibold rounded-xl text-white bg-slate-900 hover:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-slate-900 shadow-lg hover:shadow-xl transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed;
   }
 
   .btn-secondary {
@@ -26,10 +28,10 @@
   }
 
   .card {
-    @apply bg-white/80 backdrop-blur-sm rounded-2xl shadow-soft border border-slate-200/60 hover:shadow-medium transition-shadow duration-200;
+    @apply bg-white rounded-2xl shadow-lg border border-gray-200 hover:shadow-xl transition-shadow duration-200;
   }
 
   .input-field {
-    @apply w-full px-4 py-2.5 bg-white border border-slate-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-primary-500 focus:border-transparent transition-all duration-200;
+    @apply w-full px-4 py-2.5 bg-slate-50 border-0 rounded-xl text-sm text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all duration-200;
   }
 }

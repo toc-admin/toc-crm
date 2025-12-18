@@ -82,7 +82,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
               onClick={() => setViewMode('grid')}
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'grid'
-                  ? 'bg-white text-primary-600 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -92,7 +92,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
               onClick={() => setViewMode('list')}
               className={`p-2 rounded-md transition-colors ${
                 viewMode === 'list'
-                  ? 'bg-white text-primary-600 shadow-sm'
+                  ? 'bg-white text-slate-900 shadow-sm'
                   : 'text-slate-600 hover:text-slate-900'
               }`}
             >
@@ -150,7 +150,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
 
               {/* Content */}
               <div className="p-6">
-                <h3 className="text-lg font-display font-bold text-slate-900 mb-2 group-hover:text-primary-600 transition-colors">
+                <h3 className="text-lg font-display font-bold text-slate-900 mb-2 transition-colors">
                   {category.name}
                 </h3>
 
@@ -175,7 +175,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
                       e.stopPropagation()
                       router.push(`/dashboard/categories/${category.id}`)
                     }}
-                    className="flex-1 py-2 px-3 bg-primary-50 text-primary-600 text-sm font-medium rounded-lg hover:bg-primary-100 transition-colors"
+                    className="flex-1 py-2 px-3 bg-gray-100 text-slate-900 text-sm font-medium rounded-lg hover:bg-gray-200 transition-colors"
                   >
                     <Edit className="h-4 w-4 inline mr-1" />
                     Edit
@@ -259,7 +259,7 @@ export default function CategoriesGrid({ categories }: CategoriesGridProps) {
                             e.stopPropagation()
                             router.push(`/dashboard/categories/${category.id}`)
                           }}
-                          className="p-2 text-slate-600 hover:text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                          className="p-2 text-slate-600 hover:text-slate-900 hover:bg-gray-100 rounded-lg transition-colors"
                         >
                           <Edit className="h-4 w-4" />
                         </button>
