@@ -18,6 +18,11 @@ interface Product {
   short_description: string | null
   brand: { name: string } | null
   category: { name: string } | null
+  images?: Array<{
+    image_url: string
+    thumbnail_url: string | null
+    is_primary: boolean
+  }>
 }
 
 interface ProductsTableProps {
@@ -38,6 +43,13 @@ export default function ProductsTable({
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
   const router = useRouter()
   const supabase = createClient()
+
+  // Get primary or first image
+  const getPrimaryImage = (product: Product) => {
+    if (!product.images || product.images.length === 0) return null
+    const primaryImage = product.images.find((img) => img.is_primary)
+    return primaryImage || product.images[0]
+  }
 
   // Filter products
   const filteredProducts = useMemo(() => {
@@ -65,12 +77,14 @@ export default function ProductsTable({
     e.preventDefault()
     e.stopPropagation()
 
-    if (!confirm(`Are you sure you want to delete "${name}"?`)) return
+    if (!confirm(`Are you sure you want to permanently delete "${name}"? This cannot be undone.`)) return
 
     try {
+      // Hard delete - completely removes the product and all related data (images, features, etc.)
+      // Thanks to CASCADE delete constraints, all related records will be automatically deleted
       const { error } = await (supabase
         .from('products') as any)
-        .update({ deleted_at: new Date().toISOString() })
+        .delete()
         .eq('id', id)
 
       if (error) throw error
@@ -173,15 +187,28 @@ export default function ProductsTable({
       {filteredProducts.length > 0 ? (
         viewMode === 'grid' ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product) => {
+              const primaryImage = getPrimaryImage(product)
+
+              return (
               <Link
                 key={product.id}
                 href={`/dashboard/products/${product.id}`}
                 className="group card p-0 overflow-hidden hover:shadow-large hover:scale-[1.02] transition-all duration-300 cursor-pointer"
               >
-                {/* Product Image Placeholder */}
+                {/* Product Image */}
                 <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center overflow-hidden">
-                  <Package className="h-16 w-16 text-slate-400 group-hover:scale-110 transition-transform duration-300" />
+                  {primaryImage ? (
+                    <Image
+                      src={primaryImage.thumbnail_url || primaryImage.image_url}
+                      alt={product.name}
+                      fill
+                      className="object-cover group-hover:scale-110 transition-transform duration-300"
+                      sizes="(max-width: 768px) 100vw, (max-width: 1024px) 50vw, 25vw"
+                    />
+                  ) : (
+                    <Package className="h-16 w-16 text-slate-400 group-hover:scale-110 transition-transform duration-300" />
+                  )}
 
                   {/* Badges */}
                   <div className="absolute top-3 left-3 flex flex-col gap-2">
@@ -244,19 +271,32 @@ export default function ProductsTable({
                   </div>
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         ) : (
           // List View
           <div className="card divide-y divide-slate-100">
-            {filteredProducts.map((product) => (
+            {filteredProducts.map((product) => {
+              const primaryImage = getPrimaryImage(product)
+
+              return (
               <Link
                 key={product.id}
                 href={`/dashboard/products/${product.id}`}
                 className="flex items-center gap-4 p-4 hover:bg-slate-50 transition-colors duration-200 group"
               >
-                <div className="w-20 h-20 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center flex-shrink-0">
-                  <Package className="h-8 w-8 text-slate-400" />
+                <div className="relative w-20 h-20 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 flex items-center justify-center flex-shrink-0 overflow-hidden">
+                  {primaryImage ? (
+                    <Image
+                      src={primaryImage.thumbnail_url || primaryImage.image_url}
+                      alt={product.name}
+                      fill
+                      className="object-cover"
+                      sizes="80px"
+                    />
+                  ) : (
+                    <Package className="h-8 w-8 text-slate-400" />
+                  )}
                 </div>
 
                 <div className="flex-1 min-w-0">
@@ -299,7 +339,7 @@ export default function ProductsTable({
                   </div>
                 </div>
               </Link>
-            ))}
+            )})}
           </div>
         )
       ) : (

@@ -54,6 +54,9 @@ export default function ProductForm({
   const [features, setFeatures] = useState<string[]>(
     initialData?.features?.map((f: any) => f.feature_name) || []
   )
+  const [certifications, setCertifications] = useState<string[]>(
+    initialData?.certifications?.map((c: any) => c.certification_name) || []
+  )
   const [colors, setColors] = useState<Array<{ name: string; hex: string }>>(
     initialData?.colors?.map((c: any) => ({ name: c.color_name, hex: c.hex_code || '' })) || []
   )
@@ -63,6 +66,10 @@ export default function ProductForm({
   const [selectedRooms, setSelectedRooms] = useState<string[]>(
     initialData?.rooms?.map((r: any) => r.id) || []
   )
+  const [datasheetUrl, setDatasheetUrl] = useState<string | null>(
+    initialData?.datasheet_url || null
+  )
+  const [datasheetUploading, setDatasheetUploading] = useState(false)
 
   const {
     register,
@@ -205,6 +212,56 @@ export default function ProductForm({
     }
   }
 
+  const handleDatasheetUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    // Validate PDF
+    if (file.type !== 'application/pdf') {
+      alert('Only PDF files are allowed')
+      return
+    }
+
+    if (!productId) {
+      alert('Please save the product first before uploading a datasheet')
+      return
+    }
+
+    setDatasheetUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      formData.append('productId', productId)
+
+      const response = await fetch('/api/upload-datasheet', {
+        method: 'POST',
+        body: formData,
+      })
+
+      if (!response.ok) throw new Error('Upload failed')
+
+      const data = await response.json()
+
+      // Update product with datasheet URL
+      const { error } = await (supabase
+        .from('products') as any)
+        .update({ datasheet_url: data.url })
+        .eq('id', productId)
+
+      if (error) throw error
+
+      setDatasheetUrl(data.url)
+      setSuccessMessage('Datasheet uploaded successfully')
+      setShowSuccessModal(true)
+    } catch (error) {
+      console.error('Error uploading datasheet:', error)
+      alert('Failed to upload datasheet')
+    } finally {
+      setDatasheetUploading(false)
+    }
+  }
+
   const onSubmit = async (data: ProductFormData) => {
     setLoading(true)
 
@@ -251,6 +308,16 @@ export default function ProductForm({
         await (supabase
           .from('product_features') as any)
           .insert(features.map((f) => ({ product_id: newProductId, feature_name: f })))
+      }
+
+      // Handle certifications
+      if (productId) {
+        await (supabase.from('product_certifications') as any).delete().eq('product_id', productId)
+      }
+      if (certifications.length > 0 && newProductId) {
+        await (supabase
+          .from('product_certifications') as any)
+          .insert(certifications.map((c) => ({ product_id: newProductId, certification_name: c })))
       }
 
       // Handle colors
@@ -555,9 +622,58 @@ export default function ProductForm({
         </div>
       </div>
 
+      {/* Datasheet Upload */}
+      <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Product Datasheet</h3>
+        <div className="space-y-4">
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Upload PDF Datasheet {!productId && <span className="text-gray-500">(Save product first)</span>}
+            </label>
+            <input
+              type="file"
+              accept=".pdf,application/pdf"
+              onChange={handleDatasheetUpload}
+              disabled={!productId || datasheetUploading}
+              className="block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-gray-100 file:text-slate-900 hover:file:bg-gray-200 disabled:opacity-50 disabled:cursor-not-allowed"
+            />
+            <p className="mt-1 text-xs text-gray-500">PDF files only, max 10MB</p>
+            {datasheetUploading && (
+              <p className="mt-2 text-sm text-gray-500 flex items-center">
+                <Loader2 className="animate-spin mr-2 h-4 w-4" />
+                Uploading datasheet...
+              </p>
+            )}
+            {datasheetUrl && (
+              <div className="mt-2 flex items-center gap-2">
+                <a
+                  href={datasheetUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="text-sm text-sky-600 hover:text-sky-700 underline"
+                >
+                  View current datasheet
+                </a>
+                <button
+                  type="button"
+                  onClick={() => {
+                    if (confirm('Are you sure you want to remove the datasheet?')) {
+                      setDatasheetUrl(null)
+                    }
+                  }}
+                  className="text-sm text-red-600 hover:text-red-700"
+                >
+                  Remove
+                </button>
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+
       {/* Features - Simple list */}
       <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-        <h3 className="text-lg font-medium text-gray-900 mb-4">Features</h3>
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Key Features</h3>
         <div className="space-y-2">
           {features.map((feature, idx) => (
             <div key={idx} className="flex gap-2">
@@ -587,6 +703,42 @@ export default function ProductForm({
             className="text-sm text-slate-900 hover:text-slate-700"
           >
             + Add Feature
+          </button>
+        </div>
+      </div>
+
+      {/* Certifications */}
+      <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
+        <h3 className="text-lg font-medium text-gray-900 mb-4">Certifications</h3>
+        <div className="space-y-2">
+          {certifications.map((certification, idx) => (
+            <div key={idx} className="flex gap-2">
+              <input
+                type="text"
+                value={certification}
+                onChange={(e) => {
+                  const newCertifications = [...certifications]
+                  newCertifications[idx] = e.target.value
+                  setCertifications(newCertifications)
+                }}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                placeholder="Certification name (e.g., ISO 9001, GREENGUARD)"
+              />
+              <button
+                type="button"
+                onClick={() => setCertifications(certifications.filter((_, i) => i !== idx))}
+                className="px-3 py-2 text-red-600 hover:bg-red-50 rounded-md"
+              >
+                <X className="h-5 w-5" />
+              </button>
+            </div>
+          ))}
+          <button
+            type="button"
+            onClick={() => setCertifications([...certifications, ''])}
+            className="text-sm text-slate-900 hover:text-slate-700"
+          >
+            + Add Certification
           </button>
         </div>
       </div>

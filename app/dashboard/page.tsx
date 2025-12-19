@@ -13,7 +13,7 @@ async function getDashboardStats() {
     { count: totalCategories },
     { count: totalBrands },
   ] = await Promise.all([
-    supabase.from('products').select('*', { count: 'exact', head: true }).is('deleted_at', null),
+    supabase.from('products').select('*', { count: 'exact', head: true }),
     supabase.from('quote_requests').select('*', { count: 'exact', head: true }),
     supabase
       .from('quote_requests')
@@ -22,8 +22,7 @@ async function getDashboardStats() {
     supabase
       .from('products')
       .select('*', { count: 'exact', head: true })
-      .eq('is_featured', true)
-      .is('deleted_at', null),
+      .eq('is_featured', true),
     supabase.from('categories').select('*', { count: 'exact', head: true }),
     supabase.from('brands').select('*', { count: 'exact', head: true }),
   ])

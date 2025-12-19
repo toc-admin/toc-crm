@@ -32,7 +32,12 @@ export default function LoginPage() {
         router.refresh()
       }
     } catch (err: any) {
-      setError(err.message || 'Failed to sign in')
+      // Check if it's a rate limit error
+      if (err.message?.toLowerCase().includes('rate limit')) {
+        setError('Too many login attempts. Please wait a few minutes and try again.')
+      } else {
+        setError(err.message || 'Failed to sign in')
+      }
     } finally {
       setLoading(false)
     }

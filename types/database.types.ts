@@ -118,6 +118,9 @@ export interface Database {
           sku: string | null
           is_new: boolean
           is_featured: boolean
+          datasheet_url: string | null
+          created_by: string | null
+          updated_by: string | null
           deleted_at: string | null
           created_at: string
           updated_at: string
@@ -134,6 +137,9 @@ export interface Database {
           sku?: string | null
           is_new?: boolean
           is_featured?: boolean
+          datasheet_url?: string | null
+          created_by?: string | null
+          updated_by?: string | null
           deleted_at?: string | null
           created_at?: string
           updated_at?: string
@@ -150,6 +156,9 @@ export interface Database {
           sku?: string | null
           is_new?: boolean
           is_featured?: boolean
+          datasheet_url?: string | null
+          created_by?: string | null
+          updated_by?: string | null
           deleted_at?: string | null
           created_at?: string
           updated_at?: string
@@ -253,6 +262,26 @@ export interface Database {
           created_at?: string
         }
       }
+      product_certifications: {
+        Row: {
+          id: string
+          product_id: string
+          certification_name: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          product_id: string
+          certification_name: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          product_id?: string
+          certification_name?: string
+          created_at?: string
+        }
+      }
       product_rooms: {
         Row: {
           product_id: string
@@ -324,6 +353,7 @@ export type ProductImage = Database['public']['Tables']['product_images']['Row']
 export type ProductFeature = Database['public']['Tables']['product_features']['Row']
 export type ProductColor = Database['public']['Tables']['product_colors']['Row']
 export type ProductSpecification = Database['public']['Tables']['product_specifications']['Row']
+export type ProductCertification = Database['public']['Tables']['product_certifications']['Row']
 export type ProductRoom = Database['public']['Tables']['product_rooms']['Row']
 export type QuoteRequest = Database['public']['Tables']['quote_requests']['Row']
 
@@ -335,5 +365,6 @@ export type ProductWithRelations = Product & {
   features?: ProductFeature[]
   colors?: ProductColor[]
   specifications?: ProductSpecification[]
+  certifications?: ProductCertification[]
   rooms?: Room[]
 }

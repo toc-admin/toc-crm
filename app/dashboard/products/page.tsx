@@ -14,9 +14,9 @@ async function getProducts() {
     .select(`
       *,
       brand:brands(name),
-      category:categories(name)
+      category:categories(name),
+      images:product_images(image_url, thumbnail_url, is_primary)
     `)
-    .is('deleted_at', null)
     .order('created_at', { ascending: false })
 
   if (error) {

@@ -12,12 +12,12 @@ async function getProduct(id: string) {
       *,
       images:product_images(*),
       features:product_features(*),
+      certifications:product_certifications(*),
       colors:product_colors(*),
       specifications:product_specifications(*),
       rooms:product_rooms(room_id)
     `)
     .eq('id', id)
-    .is('deleted_at', null)
     .single()
 
   if (error || !product) {
