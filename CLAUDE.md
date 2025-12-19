@@ -16,18 +16,18 @@ npm run lint
 
 ## Structure
 ```
-/app/dashboard/*    # Protected routes: products, categories, brands, rooms, quotes
-/components         # layout/, products/, categories/, ui/
-/lib/supabase       # createServerClient(), createClient()
+/app/dashboard/*    # Protected routes: products, categories, brands, rooms, quotes, settings
+/components         # layout/, products/, categories/, settings/, ui/
+/lib/supabase       # createServerClient(), createClient(), migrations/
 /types              # database.types.ts
 ```
 
 ## Database
-**Main tables:** products (soft delete), product_images, product_features, product_colors, product_specifications, categories, brands, rooms, product_rooms (many-to-many), quote_requests
+**Main tables:** products (soft delete), product_images, product_features, product_colors, product_specifications, categories, brands, rooms, product_rooms (many-to-many), quote_requests, user_preferences, company_settings
 
-**Storage buckets:** product-images, category-images, brand-logos, room-images (all public)
+**Storage buckets:** product-images, category-images, brand-logos, room-images, avatars, company-logos (all public)
 
-**Auth:** `/dashboard/*` requires auth via middleware.ts
+**Auth:** `/dashboard/*` requires auth via middleware.ts, user metadata stores full_name + avatar_url
 
 ## Key Patterns
 
@@ -76,3 +76,12 @@ await supabase.from('products').insert({...})
 
 **Phase 4 (Quote Requests): ✅ COMPLETE**
 - ✅ Quote requests management: Full quote request tracking with status workflow (new, contacted, quoted, closed), grid/list views, customer/product details, search/filter by status
+
+**Phase 5 (Settings & Profile): ✅ COMPLETE**
+- ✅ Settings screen: Tabbed interface (Profile, Security, Preferences, Company)
+- ✅ Profile management: Full name, avatar upload (Sharp processing), email display
+- ✅ Security: Password change with validation (min 8 chars)
+- ✅ Preferences: Default view mode (grid/list), email notification toggles
+- ✅ Company settings: Name, logo, address, phone, email (shared across users)
+- ✅ Dashboard header: Floating UserProfile + LiveClock in top-right corner
+- ✅ API endpoints: /api/upload-avatar, /api/upload-company-logo
