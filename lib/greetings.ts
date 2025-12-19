@@ -1,7 +1,8 @@
-// Extract username from email (e.g., bruno@theofficecompany.eu -> bruno)
+// Extract username from email (e.g., bruno@theofficecompany.eu -> Bruno)
 export function getUsernameFromEmail(email: string): string {
   if (!email) return 'there'
-  return email.split('@')[0]
+  const username = email.split('@')[0]
+  return username.charAt(0).toUpperCase() + username.slice(1)
 }
 
 // Random greetings with some fun easter eggs

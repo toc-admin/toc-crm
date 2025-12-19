@@ -46,10 +46,10 @@ export default function LoginPage() {
           <div className="bg-white rounded-3xl shadow-2xl p-10">
             <div className="mb-8">
               <h1 className="text-4xl font-bold text-slate-900 mb-2">
-                Login
+                Take a seat.
               </h1>
               <p className="text-slate-600">
-                Enter your credentials to get in
+                You're about to manage an unreasonable number of chairs.
               </p>
             </div>
 
@@ -73,7 +73,7 @@ export default function LoginPage() {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   className="w-full px-4 py-3 bg-slate-50 border-0 rounded-xl text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-slate-900 transition-all"
-                  placeholder="dimerpaix@email.com"
+                  placeholder="you@theofficecompany.eu"
                 />
               </div>
 
@@ -133,9 +133,9 @@ export default function LoginPage() {
 
         {/* Tagline at bottom */}
         <div className="absolute bottom-12 left-12 right-12 text-white">
-          <h2 className="text-5xl xl:text-6xl font-bold leading-tight">
-            Welcome to<br />
-            <span className="font-extrabold">The Office Company</span>
+          <h2 className="text-5xl xl:text-6xl font-bold leading-relaxed">
+            The Office Co.<br />
+            <span className="font-extrabold">We take seating very seriously.</span>
           </h2>
         </div>
       </div>
