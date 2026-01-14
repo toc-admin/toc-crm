@@ -12,9 +12,8 @@ interface Brand {
   id: string
   name: string
   slug: string
-  description: string | null
   logo_url: string | null
-  website: string | null
+  website_url: string | null
   created_at: string
 }
 
@@ -155,12 +154,6 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                   {brand.name}
                 </h3>
 
-                {brand.description && (
-                  <p className="text-sm text-slate-600 mb-4 line-clamp-2">
-                    {brand.description}
-                  </p>
-                )}
-
                 <div className="flex items-center justify-between text-xs text-slate-500 mb-4">
                   <span>{formatDate(brand.created_at)}</span>
                   <span className="font-mono bg-slate-100 px-2 py-1 rounded">
@@ -168,10 +161,10 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                   </span>
                 </div>
 
-                {brand.website && (
+                {brand.website_url && (
                   <div className="mb-4">
                     <a
-                      href={brand.website}
+                      href={brand.website_url}
                       target="_blank"
                       rel="noopener noreferrer"
                       onClick={(e) => e.stopPropagation()}
@@ -255,11 +248,6 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                         </div>
                         <div>
                           <div className="font-medium text-slate-900">{brand.name}</div>
-                          {brand.description && (
-                            <div className="text-sm text-slate-500 line-clamp-1 max-w-md">
-                              {brand.description}
-                            </div>
-                          )}
                         </div>
                       </div>
                     </td>
@@ -269,9 +257,9 @@ export default function BrandsGrid({ brands }: BrandsGridProps) {
                       </span>
                     </td>
                     <td className="px-6 py-4">
-                      {brand.website ? (
+                      {brand.website_url ? (
                         <a
-                          href={brand.website}
+                          href={brand.website_url}
                           target="_blank"
                           rel="noopener noreferrer"
                           onClick={(e) => e.stopPropagation()}
