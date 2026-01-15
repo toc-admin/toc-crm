@@ -37,6 +37,7 @@ export default function RoomForm({
   const [uploading, setUploading] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
+  const [imageError, setImageError] = useState(false)
 
   const {
     register,
@@ -93,6 +94,7 @@ export default function RoomForm({
         if (error) throw error
 
         setImageUrl(data.url)
+        setImageError(false)
         setSuccessMessage('Image uploaded successfully')
         setShowSuccessModal(true)
       } catch (error) {
@@ -289,19 +291,32 @@ export default function RoomForm({
         </h2>
 
         {imageUrl ? (
-          <div className="relative inline-block">
-            <div className="relative w-full h-64 rounded-2xl overflow-hidden max-w-2xl">
-              <Image
-                src={imageUrl}
-                alt="Room"
-                fill
-                className="object-cover"
-              />
+          <div className="relative w-full max-w-2xl">
+            <div className="relative w-full h-64 rounded-2xl overflow-hidden bg-slate-100">
+              {imageError ? (
+                <div className="flex items-center justify-center h-full text-slate-500">
+                  <div className="text-center">
+                    <p className="text-sm">Failed to load image</p>
+                    <p className="text-xs mt-1">URL: {imageUrl}</p>
+                  </div>
+                </div>
+              ) : (
+                <Image
+                  src={imageUrl}
+                  alt="Room hero image"
+                  fill
+                  sizes="(max-width: 768px) 100vw, 800px"
+                  className="object-cover"
+                  onError={() => setImageError(true)}
+                  onLoad={() => setImageError(false)}
+                  priority
+                />
+              )}
             </div>
             <button
               type="button"
               onClick={removeImage}
-              className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+              className="absolute -top-2 -right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors z-10"
             >
               <X className="h-4 w-4" />
             </button>

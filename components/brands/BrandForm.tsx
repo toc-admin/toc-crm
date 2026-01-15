@@ -14,7 +14,6 @@ import SuccessModal from '@/components/ui/SuccessModal'
 const brandSchema = z.object({
   name: z.string().min(1, 'Brand name is required'),
   slug: z.string().min(1, 'Slug is required'),
-  description: z.string().optional(),
   website: z.string().optional(),
 })
 
@@ -45,11 +44,10 @@ export default function BrandForm({
     formState: { errors },
   } = useForm<BrandFormData>({
     resolver: zodResolver(brandSchema),
-    defaultValues: initialData || {
-      name: '',
-      slug: '',
-      description: '',
-      website: '',
+    defaultValues: {
+      name: initialData?.name || '',
+      slug: initialData?.slug || '',
+      website: initialData?.website_url || '',
     },
   })
 
@@ -144,8 +142,7 @@ export default function BrandForm({
       const payload = {
         name: data.name || null,
         slug: data.slug || null,
-        description: data.description || null,
-        website: data.website || null,
+        website_url: data.website || null,
       }
 
       if (brandId) {
@@ -246,20 +243,6 @@ export default function BrandForm({
             {errors.slug && (
               <p className="mt-1 text-sm text-red-600">{errors.slug.message}</p>
             )}
-          </div>
-
-          {/* Description */}
-          <div>
-            <label htmlFor="description" className="block text-sm font-medium text-slate-700 mb-2">
-              Description
-            </label>
-            <textarea
-              id="description"
-              {...register('description')}
-              rows={4}
-              className="input-field resize-none"
-              placeholder="Brief description of the brand..."
-            />
           </div>
 
           {/* Website */}

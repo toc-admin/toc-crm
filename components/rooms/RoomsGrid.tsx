@@ -25,6 +25,7 @@ interface RoomsGridProps {
 export default function RoomsGrid({ rooms }: RoomsGridProps) {
   const [searchTerm, setSearchTerm] = useState('')
   const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid')
+  const [imageErrors, setImageErrors] = useState<Record<string, boolean>>({})
   const router = useRouter()
   const supabase = createClient()
 
@@ -135,12 +136,15 @@ export default function RoomsGrid({ rooms }: RoomsGridProps) {
             >
               {/* Image */}
               <div className="relative h-48 bg-gradient-to-br from-slate-100 to-slate-200">
-                {room.hero_image_url ? (
+                {room.hero_image_url && !imageErrors[room.id] ? (
                   <Image
                     src={room.hero_image_url}
                     alt={room.name}
                     fill
                     className="object-cover"
+                    onError={() => {
+                      setImageErrors(prev => ({ ...prev, [room.id]: true }))
+                    }}
                   />
                 ) : (
                   <div className="absolute inset-0 flex items-center justify-center">
@@ -227,12 +231,15 @@ export default function RoomsGrid({ rooms }: RoomsGridProps) {
                     <td className="px-6 py-4">
                       <div className="flex items-center gap-3">
                         <div className="relative w-12 h-12 rounded-lg overflow-hidden bg-slate-100 flex-shrink-0">
-                          {room.hero_image_url ? (
+                          {room.hero_image_url && !imageErrors[room.id] ? (
                             <Image
                               src={room.hero_image_url}
                               alt={room.name}
                               fill
                               className="object-cover"
+                              onError={() => {
+                                setImageErrors(prev => ({ ...prev, [room.id]: true }))
+                              }}
                             />
                           ) : (
                             <div className="flex items-center justify-center h-full">
