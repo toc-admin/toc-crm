@@ -9,6 +9,8 @@ import {
   Tag,
   Building2,
   Mail,
+  FileText,
+  FileEdit,
   Settings,
   LogOut,
   Sparkles
@@ -22,7 +24,9 @@ const navigation = [
   { name: 'Categories', href: '/dashboard/categories', icon: FolderOpen },
   { name: 'Brands', href: '/dashboard/brands', icon: Tag },
   { name: 'Rooms', href: '/dashboard/rooms', icon: Building2 },
+  { name: 'Articles', href: '/dashboard/articles', icon: FileEdit },
   { name: 'Quote Requests', href: '/dashboard/quotes', icon: Mail },
+  { name: 'Quote Maker', href: '/dashboard/quote-maker', icon: FileText },
 ]
 
 export default function Sidebar() {

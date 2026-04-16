@@ -340,6 +340,231 @@ export interface Database {
           updated_at?: string
         }
       }
+      quotes: {
+        Row: {
+          id: string
+          quote_number: string
+          customer_name: string
+          customer_email: string | null
+          customer_phone: string | null
+          customer_company: string | null
+          customer_address: string | null
+          subtotal: number
+          discount_type: 'amount' | 'percentage' | null
+          discount_value: number
+          discount_amount: number
+          vat_rate: number
+          vat_amount: number
+          total: number
+          valid_until: string | null
+          payment_terms: string | null
+          notes: string | null
+          pdf_url: string | null
+          status: 'draft' | 'sent' | 'accepted' | 'declined' | 'expired'
+          created_by: string | null
+          sent_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          quote_number: string
+          customer_name: string
+          customer_email?: string | null
+          customer_phone?: string | null
+          customer_company?: string | null
+          customer_address?: string | null
+          subtotal: number
+          discount_type?: 'amount' | 'percentage' | null
+          discount_value?: number
+          discount_amount?: number
+          vat_rate?: number
+          vat_amount: number
+          total: number
+          valid_until?: string | null
+          payment_terms?: string | null
+          notes?: string | null
+          pdf_url?: string | null
+          status?: 'draft' | 'sent' | 'accepted' | 'declined' | 'expired'
+          created_by?: string | null
+          sent_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          quote_number?: string
+          customer_name?: string
+          customer_email?: string | null
+          customer_phone?: string | null
+          customer_company?: string | null
+          customer_address?: string | null
+          subtotal?: number
+          discount_type?: 'amount' | 'percentage' | null
+          discount_value?: number
+          discount_amount?: number
+          vat_rate?: number
+          vat_amount?: number
+          total?: number
+          valid_until?: string | null
+          payment_terms?: string | null
+          notes?: string | null
+          pdf_url?: string | null
+          status?: 'draft' | 'sent' | 'accepted' | 'declined' | 'expired'
+          created_by?: string | null
+          sent_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      quote_items: {
+        Row: {
+          id: string
+          quote_id: string
+          position_number: number
+          name: string
+          description: string | null
+          quantity: number
+          unit_price: number
+          line_total: number
+          image_url: string | null
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          quote_id: string
+          position_number: number
+          name: string
+          description?: string | null
+          quantity?: number
+          unit_price: number
+          line_total: number
+          image_url?: string | null
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          quote_id?: string
+          position_number?: number
+          name?: string
+          description?: string | null
+          quantity?: number
+          unit_price?: number
+          line_total?: number
+          image_url?: string | null
+          created_at?: string
+        }
+      }
+      article_categories: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          created_at?: string
+        }
+      }
+      articles: {
+        Row: {
+          id: string
+          title: string
+          slug: string
+          excerpt: string | null
+          content: string | null
+          cover_image_url: string | null
+          cover_image_thumbnail_url: string | null
+          category_id: string | null
+          author_id: string | null
+          status: 'draft' | 'published' | 'archived'
+          meta_title: string | null
+          meta_description: string | null
+          published_at: string | null
+          deleted_at: string | null
+          created_at: string
+          updated_at: string
+        }
+        Insert: {
+          id?: string
+          title: string
+          slug: string
+          excerpt?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          cover_image_thumbnail_url?: string | null
+          category_id?: string | null
+          author_id?: string | null
+          status?: 'draft' | 'published' | 'archived'
+          meta_title?: string | null
+          meta_description?: string | null
+          published_at?: string | null
+          deleted_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+        Update: {
+          id?: string
+          title?: string
+          slug?: string
+          excerpt?: string | null
+          content?: string | null
+          cover_image_url?: string | null
+          cover_image_thumbnail_url?: string | null
+          category_id?: string | null
+          author_id?: string | null
+          status?: 'draft' | 'published' | 'archived'
+          meta_title?: string | null
+          meta_description?: string | null
+          published_at?: string | null
+          deleted_at?: string | null
+          created_at?: string
+          updated_at?: string
+        }
+      }
+      tags: {
+        Row: {
+          id: string
+          name: string
+          slug: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          name: string
+          slug: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          name?: string
+          slug?: string
+          created_at?: string
+        }
+      }
+      article_tags: {
+        Row: {
+          article_id: string
+          tag_id: string
+        }
+        Insert: {
+          article_id: string
+          tag_id: string
+        }
+        Update: {
+          article_id?: string
+          tag_id?: string
+        }
+      }
     }
   }
 }
@@ -356,8 +581,13 @@ export type ProductSpecification = Database['public']['Tables']['product_specifi
 export type ProductCertification = Database['public']['Tables']['product_certifications']['Row']
 export type ProductRoom = Database['public']['Tables']['product_rooms']['Row']
 export type QuoteRequest = Database['public']['Tables']['quote_requests']['Row']
+export type Quote = Database['public']['Tables']['quotes']['Row']
+export type QuoteItem = Database['public']['Tables']['quote_items']['Row']
 
 // Extended types with relations
+export type QuoteWithItems = Quote & {
+  items?: QuoteItem[]
+}
 export type ProductWithRelations = Product & {
   brand?: Brand | null
   category?: Category | null
@@ -367,4 +597,15 @@ export type ProductWithRelations = Product & {
   specifications?: ProductSpecification[]
   certifications?: ProductCertification[]
   rooms?: Room[]
+}
+
+// Article types
+export type ArticleCategory = Database['public']['Tables']['article_categories']['Row']
+export type Article = Database['public']['Tables']['articles']['Row']
+export type Tag = Database['public']['Tables']['tags']['Row']
+export type ArticleTag = Database['public']['Tables']['article_tags']['Row']
+
+export type ArticleWithRelations = Article & {
+  category?: ArticleCategory | null
+  tags?: Tag[]
 }
