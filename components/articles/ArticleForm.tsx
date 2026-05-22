@@ -418,6 +418,7 @@ export default function ArticleForm({
             content={content}
             onChange={setContent}
             placeholder="Start writing your article..."
+            articleId={articleId}
           />
         </div>
 

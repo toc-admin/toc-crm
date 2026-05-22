@@ -5,18 +5,21 @@ import StarterKit from '@tiptap/starter-kit'
 import Link from '@tiptap/extension-link'
 import Placeholder from '@tiptap/extension-placeholder'
 import Underline from '@tiptap/extension-underline'
+import Image from '@tiptap/extension-image'
 import TiptapToolbar from './TiptapToolbar'
 
 interface TiptapEditorProps {
   content: string
   onChange: (content: string) => void
   placeholder?: string
+  articleId?: string
 }
 
 export default function TiptapEditor({
   content,
   onChange,
   placeholder = 'Start writing your article...',
+  articleId,
 }: TiptapEditorProps) {
   const editor = useEditor({
     extensions: [
@@ -35,6 +38,11 @@ export default function TiptapEditor({
         placeholder,
       }),
       Underline,
+      Image.configure({
+        HTMLAttributes: {
+          class: 'rounded-lg max-w-full h-auto',
+        },
+      }),
     ],
     content,
     immediatelyRender: false,
@@ -51,7 +59,7 @@ export default function TiptapEditor({
 
   return (
     <div className="border border-slate-200 rounded-lg overflow-hidden bg-white">
-      <TiptapToolbar editor={editor} />
+      <TiptapToolbar editor={editor} articleId={articleId} />
       <EditorContent editor={editor} />
       <style jsx global>{`
         .ProseMirror p.is-editor-empty:first-child::before {
@@ -142,6 +150,18 @@ export default function TiptapEditor({
           background: none;
           padding: 0;
           color: inherit;
+        }
+
+        .ProseMirror img {
+          max-width: 100%;
+          height: auto;
+          border-radius: 0.5rem;
+          margin: 1.5em 0;
+        }
+
+        .ProseMirror img.ProseMirror-selectednode {
+          outline: 3px solid #0ea5e9;
+          outline-offset: 2px;
         }
       `}</style>
     </div>

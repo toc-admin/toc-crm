@@ -1,5 +1,6 @@
 'use client'
 
+import { useRef, useState } from 'react'
 import { Editor } from '@tiptap/react'
 import {
   Bold,
@@ -18,14 +19,58 @@ import {
   Heading3,
   Minus,
   Code,
+  ImageIcon,
+  Loader2,
 } from 'lucide-react'
 
 interface TiptapToolbarProps {
   editor: Editor | null
+  articleId?: string
 }
 
-export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
+export default function TiptapToolbar({ editor, articleId }: TiptapToolbarProps) {
+  const fileInputRef = useRef<HTMLInputElement>(null)
+  const [isUploading, setIsUploading] = useState(false)
+
   if (!editor) return null
+
+  const handleImageUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0]
+    if (!file) return
+
+    setIsUploading(true)
+
+    try {
+      const formData = new FormData()
+      formData.append('file', file)
+      if (articleId) {
+        formData.append('articleId', articleId)
+      }
+
+      const response = await fetch('/api/upload-content-image', {
+        method: 'POST',
+        body: formData,
+      })
+
+      const data = await response.json()
+
+      if (!response.ok) {
+        throw new Error(data.error || 'Upload failed')
+      }
+
+      // Insert image into editor
+      editor.chain().focus().setImage({ src: data.url }).run()
+    } catch (error) {
+      console.error('Image upload error:', error)
+      alert('Failed to upload image. Please try again.')
+    } finally {
+      setIsUploading(false)
+      // Reset input so same file can be selected again
+      if (fileInputRef.current) {
+        fileInputRef.current.value = ''
+      }
+    }
+  }
 
   const addLink = () => {
     const previousUrl = editor.getAttributes('link').href
@@ -182,6 +227,28 @@ export default function TiptapToolbar({ editor }: TiptapToolbarProps) {
         title="Remove Link"
       >
         <Unlink className="h-4 w-4" />
+      </ToolbarButton>
+
+      <Divider />
+
+      {/* Image */}
+      <input
+        ref={fileInputRef}
+        type="file"
+        accept="image/*"
+        onChange={handleImageUpload}
+        className="hidden"
+      />
+      <ToolbarButton
+        onClick={() => fileInputRef.current?.click()}
+        disabled={isUploading}
+        title="Insert Image"
+      >
+        {isUploading ? (
+          <Loader2 className="h-4 w-4 animate-spin" />
+        ) : (
+          <ImageIcon className="h-4 w-4" />
+        )}
       </ToolbarButton>
 
       <Divider />
