@@ -19,7 +19,9 @@ const productSchema = z.object({
   subcategory: z.string().optional(),
   sku: z.string().optional(),
   short_description: z.string().optional(),
+  short_description_hr: z.string().optional(),
   long_description: z.string().optional(),
+  long_description_hr: z.string().optional(),
   is_new: z.boolean(),
   is_featured: z.boolean(),
 })
@@ -51,8 +53,11 @@ export default function ProductForm({
   const [uploading, setUploading] = useState(false)
   const [showSuccessModal, setShowSuccessModal] = useState(false)
   const [successMessage, setSuccessMessage] = useState('')
-  const [features, setFeatures] = useState<string[]>(
-    initialData?.features?.map((f: any) => f.feature_name) || []
+  const [features, setFeatures] = useState<Array<{ name: string; name_hr: string }>>(
+    initialData?.features?.map((f: any) => ({
+      name: f.feature_name,
+      name_hr: f.feature_name_hr || '',
+    })) || []
   )
   const [certifications, setCertifications] = useState<string[]>(
     initialData?.certifications?.map((c: any) => c.certification_name) || []
@@ -87,7 +92,9 @@ export default function ProductForm({
       subcategory: '',
       sku: '',
       short_description: '',
+      short_description_hr: '',
       long_description: '',
+      long_description_hr: '',
       is_new: false,
       is_featured: false,
     },
@@ -274,7 +281,9 @@ export default function ProductForm({
         sku: data.sku?.trim() || null,
         subcategory: data.subcategory?.trim() || null,
         short_description: data.short_description?.trim() || null,
+        short_description_hr: data.short_description_hr?.trim() || null,
         long_description: data.long_description?.trim() || null,
+        long_description_hr: data.long_description_hr?.trim() || null,
       }
 
       // Insert or update product
@@ -307,7 +316,13 @@ export default function ProductForm({
       if (features.length > 0 && newProductId) {
         await (supabase
           .from('product_features') as any)
-          .insert(features.map((f) => ({ product_id: newProductId, feature_name: f })))
+          .insert(
+            features.map((f) => ({
+              product_id: newProductId,
+              feature_name: f.name,
+              feature_name_hr: f.name_hr.trim() || null,
+            }))
+          )
       }
 
       // Handle certifications
@@ -491,7 +506,7 @@ export default function ProductForm({
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Short Description
+              Short Description (EN)
             </label>
             <textarea
               {...register('short_description')}
@@ -502,10 +517,32 @@ export default function ProductForm({
 
           <div className="md:col-span-2">
             <label className="block text-sm font-medium text-gray-700 mb-2">
-              Long Description
+              Kratki opis (HR)
+            </label>
+            <textarea
+              {...register('short_description_hr')}
+              rows={2}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Long Description (EN)
             </label>
             <textarea
               {...register('long_description')}
+              rows={5}
+              className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+            />
+          </div>
+
+          <div className="md:col-span-2">
+            <label className="block text-sm font-medium text-gray-700 mb-2">
+              Dugi opis (HR)
+            </label>
+            <textarea
+              {...register('long_description_hr')}
               rows={5}
               className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
             />
@@ -679,14 +716,25 @@ export default function ProductForm({
             <div key={idx} className="flex gap-2">
               <input
                 type="text"
-                value={feature}
+                value={feature.name}
                 onChange={(e) => {
                   const newFeatures = [...features]
-                  newFeatures[idx] = e.target.value
+                  newFeatures[idx] = { ...newFeatures[idx], name: e.target.value }
                   setFeatures(newFeatures)
                 }}
                 className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
-                placeholder="Feature description"
+                placeholder="Feature description (EN)"
+              />
+              <input
+                type="text"
+                value={feature.name_hr}
+                onChange={(e) => {
+                  const newFeatures = [...features]
+                  newFeatures[idx] = { ...newFeatures[idx], name_hr: e.target.value }
+                  setFeatures(newFeatures)
+                }}
+                className="flex-1 px-3 py-2 border border-gray-300 rounded-md"
+                placeholder="Croatian translation (optional)"
               />
               <button
                 type="button"
@@ -699,7 +747,7 @@ export default function ProductForm({
           ))}
           <button
             type="button"
-            onClick={() => setFeatures([...features, ''])}
+            onClick={() => setFeatures([...features, { name: '', name_hr: '' }])}
             className="text-sm text-slate-900 hover:text-slate-700"
           >
             + Add Feature

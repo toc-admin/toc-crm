@@ -15,6 +15,8 @@ const categorySchema = z.object({
   name: z.string().min(1, 'Category name is required'),
   slug: z.string().min(1, 'Slug is required'),
   description: z.string().optional(),
+  name_hr: z.string().optional(),
+  description_hr: z.string().optional(),
 })
 
 type CategoryFormData = z.infer<typeof categorySchema>
@@ -44,11 +46,21 @@ export default function CategoryForm({
     formState: { errors },
   } = useForm<CategoryFormData>({
     resolver: zodResolver(categorySchema),
-    defaultValues: initialData || {
-      name: '',
-      slug: '',
-      description: '',
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name || '',
+          slug: initialData.slug || '',
+          description: initialData.description || '',
+          name_hr: initialData.name_hr || '',
+          description_hr: initialData.description_hr || '',
+        }
+      : {
+          name: '',
+          slug: '',
+          description: '',
+          name_hr: '',
+          description_hr: '',
+        },
   })
 
   // Auto-generate slug from name
@@ -166,6 +178,8 @@ export default function CategoryForm({
         name: data.name || null,
         slug: data.slug || null,
         description: data.description || null,
+        name_hr: data.name_hr?.trim() || null,
+        description_hr: data.description_hr?.trim() || null,
       }
 
       if (categoryId) {
@@ -251,6 +265,20 @@ export default function CategoryForm({
             )}
           </div>
 
+          {/* Name (HR) */}
+          <div>
+            <label htmlFor="name_hr" className="block text-sm font-medium text-slate-700 mb-2">
+              Naziv (HR)
+            </label>
+            <input
+              type="text"
+              id="name_hr"
+              {...register('name_hr')}
+              className="input-field"
+              placeholder="npr. Uredske stolice"
+            />
+          </div>
+
           {/* Slug */}
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-slate-700 mb-2">
@@ -279,6 +307,20 @@ export default function CategoryForm({
               rows={4}
               className="input-field resize-none"
               placeholder="Brief description of the category..."
+            />
+          </div>
+
+          {/* Description (HR) */}
+          <div>
+            <label htmlFor="description_hr" className="block text-sm font-medium text-slate-700 mb-2">
+              Opis (HR)
+            </label>
+            <textarea
+              id="description_hr"
+              {...register('description_hr')}
+              rows={4}
+              className="input-field resize-none"
+              placeholder="Kratki opis kategorije na hrvatskom..."
             />
           </div>
         </div>

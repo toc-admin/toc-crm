@@ -44,6 +44,8 @@ export interface Database {
           name: string
           slug: string
           description: string | null
+          name_hr: string | null
+          description_hr: string | null
           icon_name: string | null
           image_url: string | null
           product_count: number
@@ -55,6 +57,8 @@ export interface Database {
           name: string
           slug: string
           description?: string | null
+          name_hr?: string | null
+          description_hr?: string | null
           icon_name?: string | null
           image_url?: string | null
           product_count?: number
@@ -66,6 +70,8 @@ export interface Database {
           name?: string
           slug?: string
           description?: string | null
+          name_hr?: string | null
+          description_hr?: string | null
           icon_name?: string | null
           image_url?: string | null
           product_count?: number
@@ -80,6 +86,8 @@ export interface Database {
           slug: string
           emoji: string | null
           description: string | null
+          name_hr: string | null
+          description_hr: string | null
           hero_image_url: string | null
           created_at: string
           updated_at: string
@@ -90,6 +98,8 @@ export interface Database {
           slug: string
           emoji?: string | null
           description?: string | null
+          name_hr?: string | null
+          description_hr?: string | null
           hero_image_url?: string | null
           created_at?: string
           updated_at?: string
@@ -100,6 +110,8 @@ export interface Database {
           slug?: string
           emoji?: string | null
           description?: string | null
+          name_hr?: string | null
+          description_hr?: string | null
           hero_image_url?: string | null
           created_at?: string
           updated_at?: string
@@ -115,6 +127,8 @@ export interface Database {
           subcategory: string | null
           short_description: string | null
           long_description: string | null
+          short_description_hr: string | null
+          long_description_hr: string | null
           sku: string | null
           is_new: boolean
           is_featured: boolean
@@ -134,6 +148,8 @@ export interface Database {
           subcategory?: string | null
           short_description?: string | null
           long_description?: string | null
+          short_description_hr?: string | null
+          long_description_hr?: string | null
           sku?: string | null
           is_new?: boolean
           is_featured?: boolean
@@ -153,6 +169,8 @@ export interface Database {
           subcategory?: string | null
           short_description?: string | null
           long_description?: string | null
+          short_description_hr?: string | null
+          long_description_hr?: string | null
           sku?: string | null
           is_new?: boolean
           is_featured?: boolean
@@ -201,18 +219,21 @@ export interface Database {
           id: string
           product_id: string
           feature_name: string
+          feature_name_hr: string | null
           created_at: string
         }
         Insert: {
           id?: string
           product_id: string
           feature_name: string
+          feature_name_hr?: string | null
           created_at?: string
         }
         Update: {
           id?: string
           product_id?: string
           feature_name?: string
+          feature_name_hr?: string | null
           created_at?: string
         }
       }
@@ -482,6 +503,9 @@ export interface Database {
           slug: string
           excerpt: string | null
           content: string | null
+          title_hr: string | null
+          excerpt_hr: string | null
+          content_hr: string | null
           cover_image_url: string | null
           cover_image_thumbnail_url: string | null
           category_id: string | null
@@ -489,6 +513,8 @@ export interface Database {
           status: 'draft' | 'published' | 'archived'
           meta_title: string | null
           meta_description: string | null
+          meta_title_hr: string | null
+          meta_description_hr: string | null
           published_at: string | null
           deleted_at: string | null
           created_at: string
@@ -500,6 +526,9 @@ export interface Database {
           slug: string
           excerpt?: string | null
           content?: string | null
+          title_hr?: string | null
+          excerpt_hr?: string | null
+          content_hr?: string | null
           cover_image_url?: string | null
           cover_image_thumbnail_url?: string | null
           category_id?: string | null
@@ -507,6 +536,8 @@ export interface Database {
           status?: 'draft' | 'published' | 'archived'
           meta_title?: string | null
           meta_description?: string | null
+          meta_title_hr?: string | null
+          meta_description_hr?: string | null
           published_at?: string | null
           deleted_at?: string | null
           created_at?: string
@@ -518,6 +549,9 @@ export interface Database {
           slug?: string
           excerpt?: string | null
           content?: string | null
+          title_hr?: string | null
+          excerpt_hr?: string | null
+          content_hr?: string | null
           cover_image_url?: string | null
           cover_image_thumbnail_url?: string | null
           category_id?: string | null
@@ -525,6 +559,8 @@ export interface Database {
           status?: 'draft' | 'published' | 'archived'
           meta_title?: string | null
           meta_description?: string | null
+          meta_title_hr?: string | null
+          meta_description_hr?: string | null
           published_at?: string | null
           deleted_at?: string | null
           created_at?: string

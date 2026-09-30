@@ -16,6 +16,8 @@ const roomSchema = z.object({
   slug: z.string().min(1, 'Slug is required'),
   emoji: z.string().optional(),
   description: z.string().optional(),
+  name_hr: z.string().optional(),
+  description_hr: z.string().optional(),
 })
 
 type RoomFormData = z.infer<typeof roomSchema>
@@ -46,12 +48,23 @@ export default function RoomForm({
     formState: { errors },
   } = useForm<RoomFormData>({
     resolver: zodResolver(roomSchema),
-    defaultValues: initialData || {
-      name: '',
-      slug: '',
-      emoji: '',
-      description: '',
-    },
+    defaultValues: initialData
+      ? {
+          name: initialData.name || '',
+          slug: initialData.slug || '',
+          emoji: initialData.emoji || '',
+          description: initialData.description || '',
+          name_hr: initialData.name_hr || '',
+          description_hr: initialData.description_hr || '',
+        }
+      : {
+          name: '',
+          slug: '',
+          emoji: '',
+          description: '',
+          name_hr: '',
+          description_hr: '',
+        },
   })
 
   // Auto-generate slug from name
@@ -148,6 +161,8 @@ export default function RoomForm({
         slug: data.slug || null,
         emoji: data.emoji || null,
         description: data.description || null,
+        name_hr: data.name_hr?.trim() || null,
+        description_hr: data.description_hr?.trim() || null,
       }
 
       if (roomId) {
@@ -233,6 +248,20 @@ export default function RoomForm({
             )}
           </div>
 
+          {/* Name (HR) */}
+          <div>
+            <label htmlFor="name_hr" className="block text-sm font-medium text-slate-700 mb-2">
+              Naziv (HR)
+            </label>
+            <input
+              type="text"
+              id="name_hr"
+              {...register('name_hr')}
+              className="input-field"
+              placeholder="npr. Dnevni boravak"
+            />
+          </div>
+
           {/* Slug */}
           <div>
             <label htmlFor="slug" className="block text-sm font-medium text-slate-700 mb-2">
@@ -279,6 +308,20 @@ export default function RoomForm({
               rows={4}
               className="input-field resize-none"
               placeholder="Brief description of the room type..."
+            />
+          </div>
+
+          {/* Description (HR) */}
+          <div>
+            <label htmlFor="description_hr" className="block text-sm font-medium text-slate-700 mb-2">
+              Opis (HR)
+            </label>
+            <textarea
+              id="description_hr"
+              {...register('description_hr')}
+              rows={4}
+              className="input-field resize-none"
+              placeholder="Kratki opis tipa prostorije na hrvatskom..."
             />
           </div>
         </div>

@@ -22,6 +22,10 @@ const articleSchema = z.object({
   status: z.enum(['draft', 'published', 'archived']),
   meta_title: z.string().optional(),
   meta_description: z.string().optional(),
+  title_hr: z.string().optional(),
+  excerpt_hr: z.string().optional(),
+  meta_title_hr: z.string().optional(),
+  meta_description_hr: z.string().optional(),
 })
 
 type ArticleFormData = z.infer<typeof articleSchema>
@@ -52,8 +56,14 @@ export default function ArticleForm({
   )
   const [uploading, setUploading] = useState(false)
 
-  // Content state (for Tiptap)
+  // Content state (for Tiptap) — one per language, both editors stay mounted
   const [content, setContent] = useState<string>(initialData?.content || '')
+  const [contentHr, setContentHr] = useState<string>(
+    initialData?.content_hr || ''
+  )
+
+  // Language tab state (EN fields vs HR fields)
+  const [activeLang, setActiveLang] = useState<'en' | 'hr'>('en')
 
   // Tags state
   const [selectedTags, setSelectedTags] = useState<Tag[]>(
@@ -77,6 +87,10 @@ export default function ArticleForm({
           status: initialData.status,
           meta_title: initialData.meta_title || '',
           meta_description: initialData.meta_description || '',
+          title_hr: initialData.title_hr || '',
+          excerpt_hr: initialData.excerpt_hr || '',
+          meta_title_hr: initialData.meta_title_hr || '',
+          meta_description_hr: initialData.meta_description_hr || '',
         }
       : {
           title: '',
@@ -86,6 +100,10 @@ export default function ArticleForm({
           status: 'draft',
           meta_title: '',
           meta_description: '',
+          title_hr: '',
+          excerpt_hr: '',
+          meta_title_hr: '',
+          meta_description_hr: '',
         },
   })
 
@@ -172,6 +190,12 @@ export default function ArticleForm({
     }
   }
 
+  // Validation errors only occur on English fields (HR fields are optional),
+  // so switch to the English tab to make them visible
+  const onInvalid = () => {
+    setActiveLang('en')
+  }
+
   const onSubmit = async (data: ArticleFormData) => {
     setLoading(true)
 
@@ -189,6 +213,11 @@ export default function ArticleForm({
         status: data.status,
         meta_title: data.meta_title?.trim() || null,
         meta_description: data.meta_description?.trim() || null,
+        title_hr: data.title_hr?.trim() || null,
+        excerpt_hr: data.excerpt_hr?.trim() || null,
+        content_hr: contentHr || null,
+        meta_title_hr: data.meta_title_hr?.trim() || null,
+        meta_description_hr: data.meta_description_hr?.trim() || null,
         // Set published_at when publishing for the first time
         published_at:
           data.status === 'published' && !initialData?.published_at
@@ -263,14 +292,40 @@ export default function ArticleForm({
         onClose={() => setShowSuccessModal(false)}
         message={successMessage}
       />
-      <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
+      <form onSubmit={handleSubmit(onSubmit, onInvalid)} className="space-y-8">
+        {/* Language switcher */}
+        <div className="inline-flex items-center gap-2 bg-white rounded-full shadow border border-gray-200 p-1">
+          <button
+            type="button"
+            onClick={() => setActiveLang('en')}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeLang === 'en'
+                ? 'bg-slate-900 text-white'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            English
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveLang('hr')}
+            className={`px-5 py-2 rounded-full text-sm font-medium transition-colors ${
+              activeLang === 'hr'
+                ? 'bg-slate-900 text-white'
+                : 'text-gray-700 hover:bg-gray-100'
+            }`}
+          >
+            Hrvatski
+          </button>
+        </div>
+
         {/* Basic Information */}
         <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
           <h3 className="text-lg font-medium text-gray-900 mb-4">
             Basic Information
           </h3>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="md:col-span-2">
+            <div className={activeLang === 'en' ? 'md:col-span-2' : 'hidden'}>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Title *
               </label>
@@ -283,6 +338,18 @@ export default function ArticleForm({
               {errors.title && (
                 <p className="mt-1 text-sm text-red-600">{errors.title.message}</p>
               )}
+            </div>
+
+            <div className={activeLang === 'hr' ? 'md:col-span-2' : 'hidden'}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Naslov (HR)
+              </label>
+              <input
+                type="text"
+                {...register('title_hr')}
+                placeholder="Naslov članka na hrvatskom..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+              />
             </div>
 
             <div className="md:col-span-2">
@@ -335,7 +402,7 @@ export default function ArticleForm({
               )}
             </div>
 
-            <div className="md:col-span-2">
+            <div className={activeLang === 'en' ? 'md:col-span-2' : 'hidden'}>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Excerpt
               </label>
@@ -343,6 +410,18 @@ export default function ArticleForm({
                 {...register('excerpt')}
                 rows={3}
                 placeholder="A brief summary of the article..."
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+              />
+            </div>
+
+            <div className={activeLang === 'hr' ? 'md:col-span-2' : 'hidden'}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Sažetak (HR)
+              </label>
+              <textarea
+                {...register('excerpt_hr')}
+                rows={3}
+                placeholder="Kratki sažetak članka..."
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
@@ -411,15 +490,28 @@ export default function ArticleForm({
           </div>
         </div>
 
-        {/* Content Editor */}
+        {/* Content Editor — both editors stay mounted so unsaved changes
+            survive tab switches; only visibility is toggled */}
         <div className="bg-white rounded-lg shadow p-6 border border-gray-200">
-          <h3 className="text-lg font-medium text-gray-900 mb-4">Content</h3>
-          <TiptapEditor
-            content={content}
-            onChange={setContent}
-            placeholder="Start writing your article..."
-            articleId={articleId}
-          />
+          <h3 className="text-lg font-medium text-gray-900 mb-4">
+            {activeLang === 'en' ? 'Content' : 'Sadržaj (HR)'}
+          </h3>
+          <div className={activeLang === 'en' ? '' : 'hidden'}>
+            <TiptapEditor
+              content={content}
+              onChange={setContent}
+              placeholder="Start writing your article..."
+              articleId={articleId}
+            />
+          </div>
+          <div className={activeLang === 'hr' ? '' : 'hidden'}>
+            <TiptapEditor
+              content={contentHr}
+              onChange={setContentHr}
+              placeholder="Počnite pisati članak na hrvatskom..."
+              articleId={articleId}
+            />
+          </div>
         </div>
 
         {/* SEO Settings */}
@@ -428,7 +520,7 @@ export default function ArticleForm({
             SEO Settings
           </h3>
           <div className="space-y-6">
-            <div>
+            <div className={activeLang === 'en' ? '' : 'hidden'}>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Meta Title
               </label>
@@ -440,7 +532,7 @@ export default function ArticleForm({
               />
             </div>
 
-            <div>
+            <div className={activeLang === 'en' ? '' : 'hidden'}>
               <label className="block text-sm font-medium text-gray-700 mb-2">
                 Meta Description
               </label>
@@ -448,6 +540,30 @@ export default function ArticleForm({
                 {...register('meta_description')}
                 rows={3}
                 placeholder="Leave empty to use excerpt"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+              />
+            </div>
+
+            <div className={activeLang === 'hr' ? '' : 'hidden'}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta naslov (HR)
+              </label>
+              <input
+                type="text"
+                {...register('meta_title_hr')}
+                placeholder="Ostavite prazno za korištenje naslova"
+                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
+              />
+            </div>
+
+            <div className={activeLang === 'hr' ? '' : 'hidden'}>
+              <label className="block text-sm font-medium text-gray-700 mb-2">
+                Meta opis (HR)
+              </label>
+              <textarea
+                {...register('meta_description_hr')}
+                rows={3}
+                placeholder="Ostavite prazno za korištenje sažetka"
                 className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-slate-900"
               />
             </div>
